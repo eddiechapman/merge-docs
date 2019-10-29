@@ -11,9 +11,6 @@ directories for inspection.
 
 The contents of the input directory are not disturbed.
 
-
-Input directory contains documents matching format: 
-
                         [ID]-[Category].docx
 
     - [ID] a three digit number (zero-padded) representing a degree
@@ -130,7 +127,7 @@ def main(args):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_mutually_exclusive_group()
+    group = parser.add_mutually_exclusive_group()
     group.add_argument(
         '-v', '--verbose',
         help='Verbose (debug) logging level.',
