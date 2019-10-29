@@ -1,0 +1,8 @@
+*.docx
+__pycache__/
+venv/
+descriptions/
+incomplete/
+error/
+courses/
+*.log
