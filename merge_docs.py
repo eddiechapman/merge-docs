@@ -58,7 +58,7 @@ def main(args):
     ERROR.mkdir(exist_ok=True)
     UNKNOWN.mkdir(exist_ok=True)
 
-    degree_docs = dict()
+    documents = dict()
     pattern = r'(?P<id>\d{3})-(?P<category>Skills|Courses|Mission).docx'
 
     for f in INPUT.glob('*.docx'):
@@ -66,7 +66,7 @@ def main(args):
         m = re.search(pattern, f.name)
         if m:
             logging.debug(f'{f} matched: {m.groupdict()}')
-            degree_docs[m.group('id')][m.group('category')] = f
+            documents[m.group('id')][m.group('category')] = f
 
     for degree, docs in documents:
         skills = docs.get('Skills')
