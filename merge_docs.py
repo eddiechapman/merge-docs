@@ -61,12 +61,12 @@ def main(args):
     degree_docs = dict()
     pattern = r'(?P<id>\d{3})-(?P<category>Skills|Courses|Mission).docx'
 
-    for filename in INPUT.glob('*.docx'):
-        logging.debug(f'Sorting file: {filename}')
-        m = re.search(pattern, filename)
+    for f in INPUT.glob('*.docx'):
+        logging.debug(f'Sorting file: {f}')
+        m = re.search(pattern, f.name)
         if m:
-            logging.debug(f'{filename} matched: {m.groupdict()}')
-            degree_docs[m.group('id')][m.group('category')] = filename
+            logging.debug(f'{f} matched: {m.groupdict()}')
+            degree_docs[m.group('id')][m.group('category')] = f
 
     for degree, docs in documents:
         skills = docs.get('Skills')
@@ -74,9 +74,8 @@ def main(args):
         courses = docs.get('Courses')
 
         if courses:
-            course_path = INPUT / courses
             logging.debug(f'Moving {courses} to {COURSES}')
-            course_path.rename(COURSES / courses)
+            courses.rename(COURSES / courses.name)
 
         if mission and skills:
             m_doc = docx.Document(mission)
@@ -94,23 +93,19 @@ def main(args):
 
             else:
                 if not m_txt:
-                    logging.error(f'Bad document: {mission}')
-                    mission_path = INPUT / mission
-                    mission_path.rename(ERROR / mission)
+                    logging.error(f'Bad document: {mission.name}')
+                    mission.rename(ERROR / mission.name)
                 if not s_txt:
-                    logging.error(f'Bad document {skills}')
-                    skills_path = INPUT / skills
-                    skills_path.rename(ERROR / skills)
+                    logging.error(f'Bad document {skills.name}')
+                    skills.rename(ERROR / skills)
 
         else:
             if mission:
-                mission_path = INPUT / mission
-                mission_path.rename(INCOMPLETE / mission)
-                logging.debug(f'Moving incomplete: {mission_path}')
+                mission.rename(INCOMPLETE / mission.name)
+                logging.debug(f'Moving incomplete: {mission.name}')
             elif skills:
-                skills_path = INPUT / skills
-                skills_path.rename(INCOMPLETE / skills)
-                logging.debug(f'Moving incomplete: {skills_path}')
+                skills.rename(INCOMPLETE / skills.name)
+                logging.debug(f'Moving incomplete: {skills.name}')
 
     # Separate unknown files from input directory
     known = set()
@@ -118,9 +113,9 @@ def main(args):
         known.update(docs.values())
 
     for doc in INPUT.iterdir():
-        if not doc.name in known:
+        if not doc in known:
             doc.rename(UNKNOWN / doc.name)
-            logging.warn(f'Moving unknown file: {doc}')
+            logging.warn(f'Moving unknown file: {doc.name}')
 
 
 if __name__ == '__main__':
