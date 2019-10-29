@@ -44,9 +44,7 @@ def main(args):
 
     INPUT = pathlib.Path(args.input)
     OUTPUT = pathlib.Path(args.output)
-
-    if not OUTPUT.exists() or OUTPUT.is_dir():
-        OUTPUT.mkdir()
+    OUTPUT.mkdir(exists_ok=True)
 
     DESCRIPTIONS = OUTPUT / 'descriptions'
     INCOMPLETE = OUTPUT / 'incomplete'
