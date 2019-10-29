@@ -65,7 +65,7 @@ def main(args):
 
     for filename in INPUT.glob('*.docx'):
         logging.debug(f'Sorting file: {filename}')
-        m = re.find(pattern, filename)
+        m = re.search(pattern, filename)
         if m:
             logging.debug(f'{filename} matched: {m.groupdict()}')
             degree_docs[m.group('id')][m.group('category')] = filename
@@ -159,4 +159,6 @@ if __name__ == '__main__':
     )
     args = parser.parse_args()
     main(args)
+
+
 
