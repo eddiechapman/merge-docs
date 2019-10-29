@@ -52,11 +52,11 @@ def main(args):
     ERROR = OUTPUT / 'error'
     UNKNOWN = OUTPUT / 'unknown'
 
-    DESCRIPTIONS.mkdir()
-    INCOMPLETE.mkdir()
-    COURSES.mkdir()
-    ERROR.mkdir()
-    UNKNOWN.mkdir()
+    DESCRIPTIONS.mkdir(exist_ok=True)
+    INCOMPLETE.mkdir(exist_ok=True)
+    COURSES.mkdir(exist_ok=True)
+    ERROR.mkdir(exist_ok=True)
+    UNKNOWN.mkdir(exist_ok=True)
 
     degree_docs = dict()
     pattern = r'(?P<id>\d{3})-(?P<category>Skills|Courses|Mission).docx'
