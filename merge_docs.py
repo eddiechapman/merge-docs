@@ -91,10 +91,10 @@ def main(args):
             # Both documents are present and contain text
             if m_txt and s_txt:
                 path = DESCRIPTIONS / f'{degree}-description.docx'
-                description = docx.Document(path)
+                description = docx.Document()
                 description.add_paragraph(m_txt)
                 description.add_paragraph(s_txt)
-                description.save()
+                description.save(path)
                 logging.debug(f'Description for #{degree} written to {path}')
 
             # Both documents are present but one or both is blank
