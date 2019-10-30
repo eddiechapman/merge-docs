@@ -9,12 +9,12 @@ skills and valid mission document. The resulting document combines the two.
 Incomplete, invalid, course, and unknown documents are copied to new
 directories for inspection.
 
-The contents of the input directory are not disturbed.
+The contents of the input directory are moved.
 
                         [ID]-[Category].docx
 
     - [ID] a three digit number (zero-padded) representing a degree
-    - [Category] one of "Skills", "Courses", or "Mission"
+    - [Category] one of "skills", "courses", or "mission"
 
 Output directories:
 
@@ -39,7 +39,7 @@ def main(args):
     logging.basicConfig(
         level=args.log_level or logging.INFO,
         filename='app.log',
-        format='%(levelname)s:&(asctime)s:%(message)s'
+        format='%(levelname)s:%(asctime)s:%(message)s'
     )
 
     INPUT = pathlib.Path(args.input)
@@ -88,7 +88,7 @@ def main(args):
 
             # Both documents are present and contain text
             if m_txt and s_txt:
-                path = DESCRIPTIONS / f'{degree}-Description.docx'
+                path = DESCRIPTIONS / f'{degree}-description.docx'
                 description = docx.Document(path)
                 description.add_paragraph(m_txt)
                 description.add_paragraph(s_txt)
@@ -125,7 +125,7 @@ def main(args):
 
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(description=__doc__)
     group = parser.add_mutually_exclusive_group()
     group.add_argument(
         '-v', '--verbose',
@@ -144,7 +144,7 @@ if __name__ == '__main__':
     parser.add_argument(
         '-i', '--input',
         help=(f'Path to directory of .docx files in format: '
-              f'###-[Skills|Mission|Courses].docx'),
+              f'###-[skills|mission|courses].docx'),
         metavar='input',
         type=str
     )
