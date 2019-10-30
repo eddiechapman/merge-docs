@@ -66,7 +66,9 @@ def main(args):
         m = re.search(pattern, f.name, re.IGNORECASE)
         if m:
             logging.debug(f'{f} matched: {m.groupdict()}')
-            documents[str(m.group('id'))][m.group('category').lower()] = f
+            if m.group('id') not in documents:
+                documents[(m.group('id')] = dict()
+            documents[(m.group('id')][m.group('category').lower()] = f
 
     # Process sorted documents
     for degree, docs in documents:
