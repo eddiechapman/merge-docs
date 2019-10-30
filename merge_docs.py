@@ -71,7 +71,7 @@ def main(args):
             documents[m.group('id')][m.group('category').lower()] = f
 
     # Process sorted documents
-    for degree, docs in documents:
+    for degree, docs in documents.items():
         skills = docs.get('skills')
         mission = docs.get('mission')
         courses = docs.get('courses')
