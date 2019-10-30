@@ -67,8 +67,8 @@ def main(args):
         if m:
             logging.debug(f'{f} matched: {m.groupdict()}')
             if m.group('id') not in documents:
-                documents[(m.group('id')] = dict()
-            documents[(m.group('id')][m.group('category').lower()] = f
+                documents[m.group('id')] = dict()
+            documents[m.group('id')][m.group('category').lower()] = f
 
     # Process sorted documents
     for degree, docs in documents:
