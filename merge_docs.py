@@ -104,7 +104,7 @@ def main(args):
                     mission.rename(ERROR / mission.name)
                 if not s_txt:
                     logging.error(f'Bad document {skills.name}')
-                    skills.rename(ERROR / skills)
+                    skills.rename(ERROR / skills.name)
 
         # Incomplete document sets
         else:
