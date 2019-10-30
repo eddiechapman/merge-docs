@@ -58,31 +58,35 @@ def main(args):
     ERROR.mkdir(exist_ok=True)
     UNKNOWN.mkdir(exist_ok=True)
 
+    # Sort the document paths by degree ID and category
     documents = dict()
-    pattern = r'(?P<id>\d{3})-(?P<category>Skills|Courses|Mission).docx'
-
+    pattern = r'(?P<id>\d{3})-(?P<category>skills|courses|mission).docx'
     for f in INPUT.glob('*.docx'):
         logging.debug(f'Sorting file: {f}')
-        m = re.search(pattern, f.name)
+        m = re.search(pattern, f.name, re.IGNORECASE)
         if m:
             logging.debug(f'{f} matched: {m.groupdict()}')
-            documents[m.group('id')][m.group('category')] = f
+            documents[m.group('id')][m.group('category').lower()] = f
 
+    # Process sorted documents
     for degree, docs in documents:
-        skills = docs.get('Skills')
-        mission = docs.get('Mission')
-        courses = docs.get('Courses')
+        skills = docs.get('skills')
+        mission = docs.get('mission')
+        courses = docs.get('courses')
 
+        # Course documents are saved for archiving
         if courses:
             logging.debug(f'Moving {courses} to {COURSES}')
             courses.rename(COURSES / courses.name)
 
+        # Paired mission and skills documents are combined
         if mission and skills:
             m_doc = docx.Document(mission)
             s_doc = docx.Document(skills)
             m_txt = '\n'.join([p.text for p in m_doc.paragraphs])
             s_txt = '\n'.join([p.text for p in s_doc.paragraphs])
 
+            # Both documents are present and contain text
             if m_txt and s_txt:
                 path = DESCRIPTIONS / f'{degree}-Description.docx'
                 description = docx.Document(path)
@@ -91,6 +95,7 @@ def main(args):
                 description.save()
                 logging.debug(f'Description for #{degree} written to {path}')
 
+            # Both documents are present but one or both is blank
             else:
                 if not m_txt:
                     logging.error(f'Bad document: {mission.name}')
@@ -99,6 +104,7 @@ def main(args):
                     logging.error(f'Bad document {skills.name}')
                     skills.rename(ERROR / skills)
 
+        # Incomplete document sets
         else:
             if mission:
                 mission.rename(INCOMPLETE / mission.name)
